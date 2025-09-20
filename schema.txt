@@ -1,0 +1,149 @@
+#mobile collection for products
+
+//title is documentid
+export interface Product {
+  brand: string;          // e.g., "Apple"
+  category: string;       // e.g., "Battery"
+  description: string;    // Long product description
+  images: string[];       // Array of image URLs or Firebase storage paths
+  price: number;          // e.g., 1299
+  type: string;           // e.g., "IPHONE"
+}
+
+
+
+#order collection
+export interface Order {
+  appliedCouponCode: string | null;
+  couponDiscount: number;
+  couponDiscountAmount: number;
+  createdAt: Date;
+  customerEmail: string;
+  customerPhone: string;
+  deliveryFee: number;
+  invoiceData: InvoiceData;
+  orderId: string;
+  paymentId: string;
+  paymentMethod: string;
+  paymentStatus: string;
+  shipping: number;
+  status: string;
+  subtotal: number;
+  tax: number;
+  total: number;
+  invoiceGeneratedAt: Date;
+  invoiceId: string;
+  invoiceUrl: string;
+  items: OrderItem[];
+  orderNotes: string[];
+  orderSource: string;
+  paymentDetails: PaymentDetails;
+  shippingAddress: ShippingAddress;
+  shippingDetails: ShippingDetails;
+  userId: string;
+}
+
+export interface InvoiceData {
+  billingAddress: BillingAddress;
+  customerEmail: string;
+  customerName: string;
+  customerPhone: string;
+  discount: number;
+  dueDate: Date;
+  invoiceId: string;
+  items: InvoiceItem[];
+}
+
+export interface BillingAddress {
+  address: string;
+  city: string;
+  country: string;
+  name: string;
+  pincode: string;
+  state: string;
+  createdAt: Date;
+  customerEmail: string;
+  customerName: string;
+  customerPhone: string;
+}
+
+export interface InvoiceItem {
+  name: string;
+  price: number;
+  quantity: number;
+  total: number;
+  image?: string;
+  productId?: string;
+  productName?: string;
+  selectedOptions?: Record<string, any>;
+}
+
+export interface OrderItem {
+  image: string;
+  price: number;
+  productId: string;
+  productName: string;
+  quantity: number;
+  selectedOptions?: Record<string, any>;
+}
+
+export interface PaymentDetails {
+  amount: number;
+  bank: string | null;
+  card_id: string | null;
+  contact: string;
+  created_at: Date;
+  currency: string;
+  email: string;
+  fee: number;
+  method: string;
+  tax: number;
+  vpa: string;
+  wallet: string | null;
+  paymentMethod: string;
+  paymentSignature: string;
+  paymentStatus: string;
+  paymentTransactionId: string;
+  razorpayOrderId: string;
+}
+
+export interface ShippingAddress {
+  addressLine1: string;
+  addressLine2: string;
+  city: string;
+  country: string;
+  email: string;
+  fullName: string;
+  id: string;
+  isDefault: boolean;
+  name: string;
+  phone: string;
+  pincode: string;
+  state: string;
+  type: string;
+}
+
+export interface ShippingDetails {
+  courierName: string;
+  estimatedDeliveryDays: string;
+  shippingCost: number;
+  specialInstructions: string;
+  status: string;
+  subtotal: number;
+  total: number;
+  updatedAt: Date;
+}
+
+
+#quotation collection
+export interface ContactInquiry {
+  budget: string;
+  company: string;
+  createdAt: Date;
+  email: string;
+  fullName: string;
+  message: string;
+  phone: string;
+  products: string;
+  status: 'pending' | 'processed' | 'completed'; // you can extend status as needed
+}
