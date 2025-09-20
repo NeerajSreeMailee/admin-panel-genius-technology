@@ -13,11 +13,16 @@ import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 import { ProductForm } from "@/components/forms/product-form"
 
-export function AddProductDialog() {
+interface AddProductDialogProps {
+  onSuccess?: () => void
+}
+
+export function AddProductDialog({ onSuccess }: AddProductDialogProps) {
   const [open, setOpen] = useState(false)
 
   const handleSuccess = () => {
     setOpen(false)
+    onSuccess?.()
   }
 
   const handleCancel = () => {

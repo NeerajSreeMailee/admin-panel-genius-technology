@@ -175,12 +175,8 @@ export function ProductForm({ onSuccess, onCancel }: ProductFormProps) {
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="Battery">Battery</SelectItem>
-                        <SelectItem value="Screen">Screen</SelectItem>
-                        <SelectItem value="Case">Case</SelectItem>
-                        <SelectItem value="Charger">Charger</SelectItem>
-                        <SelectItem value="Headphones">Headphones</SelectItem>
-                        <SelectItem value="Phone">Phone</SelectItem>
-                        <SelectItem value="Accessories">Accessories</SelectItem>
+                        <SelectItem value="Display">Display</SelectItem>
+                        
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -201,12 +197,14 @@ export function ProductForm({ onSuccess, onCancel }: ProductFormProps) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="IPHONE">IPHONE</SelectItem>
-                        <SelectItem value="ANDROID">ANDROID</SelectItem>
-                        <SelectItem value="SAMSUNG">SAMSUNG</SelectItem>
-                        <SelectItem value="XIAOMI">XIAOMI</SelectItem>
-                        <SelectItem value="ONEPLUS">ONEPLUS</SelectItem>
-                        <SelectItem value="UNIVERSAL">UNIVERSAL</SelectItem>
+                        <SelectItem value="Apple">APPLE</SelectItem>
+                        <SelectItem value="OPPO">OPPO</SelectItem>
+                        <SelectItem value="Samsung">SAMSUNG</SelectItem>
+                        <SelectItem value="Mi">MI</SelectItem>
+                        <SelectItem value="Vivo">VIVO</SelectItem>
+                        <SelectItem value="Infinix">INFINIX</SelectItem>
+
+
                       </SelectContent>
                     </Select>
                     <FormMessage />

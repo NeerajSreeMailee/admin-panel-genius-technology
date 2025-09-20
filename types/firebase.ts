@@ -24,6 +24,7 @@ export interface Quotation {
   phone: string
   products: string
   status: 'pending' | 'approved' | 'rejected'
+  rejectionReason?: string
   createdAt: Timestamp
 }
 

@@ -65,15 +65,7 @@ const columns: ColumnDef<User>[] = [
       </Badge>
     ),
   },
-  {
-    id: "actions",
-    header: "Actions",
-    cell: ({ row }) => (
-      <Button variant="outline" size="sm">
-        View Details
-      </Button>
-    ),
-  },
+  
 ]
 
 export default function CustomersPage() {

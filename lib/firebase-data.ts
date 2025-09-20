@@ -1,4 +1,4 @@
-import { collection, getDocs, query, orderBy, doc, setDoc, updateDoc } from 'firebase/firestore'
+import { collection, getDocs, query, orderBy, doc, setDoc, updateDoc, deleteDoc } from 'firebase/firestore'
 import { db } from './firebase'
 import type { Product, Quotation, OrderSummary, PaymentSummary } from '@/components/tables'
 
@@ -223,5 +223,17 @@ export async function fetchRecentOrders(limitCount: number = 5): Promise<OrderSu
   } catch (error) {
     console.error('Error fetching recent orders:', error)
     return []
+  }
+}
+
+// Delete product from mobile collection
+export async function deleteProduct(productId: string) {
+  try {
+    const productRef = doc(db, 'mobile', productId)
+    await deleteDoc(productRef)
+    console.log('Product deleted successfully:', productId)
+  } catch (error) {
+    console.error('Error deleting product:', error)
+    throw error
   }
 }

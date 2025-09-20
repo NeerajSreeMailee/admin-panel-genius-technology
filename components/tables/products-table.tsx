@@ -4,6 +4,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import { DataTable } from "@/components/data-table"
 import { Badge } from "@/components/ui/badge"
 import { EditProductDialog } from "@/components/dialogs/edit-product-dialog"
+import { DeleteProductDialog } from "@/components/dialogs/delete-product-dialog"
 
 export interface Product {
   id: string;
@@ -17,7 +18,12 @@ export interface Product {
   available_quantity:number;
 }
 
-const columns: ColumnDef<Product>[] = [
+interface ProductsTableProps {
+  data: Product[]
+  onDeleteSuccess?: () => void
+}
+
+const columns = (onDeleteSuccess?: () => void): ColumnDef<Product>[] => [
   {
     accessorKey: "title",
     header: "Product Title",
@@ -75,16 +81,19 @@ const columns: ColumnDef<Product>[] = [
     cell: ({ row }) => {
       const product = row.original
       return (
-        <EditProductDialog product={product} />
+        <div className="flex gap-2">
+          <EditProductDialog product={product} />
+          <DeleteProductDialog 
+            productId={product.id} 
+            productTitle={product.title} 
+            onSuccess={onDeleteSuccess}
+          />
+        </div>
       )
     },
   },
 ]
 
-interface ProductsTableProps {
-  data: Product[]
-}
-
-export function ProductsTable({ data }: ProductsTableProps) {
-  return <DataTable columns={columns} data={data} searchKey="title" />
+export function ProductsTable({ data, onDeleteSuccess }: ProductsTableProps) {
+  return <DataTable columns={columns(onDeleteSuccess)} data={data} searchKey="title" />
 }

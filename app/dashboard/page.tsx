@@ -2,10 +2,14 @@ import { Suspense } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { DollarSign, FileText, ShoppingCart, Package } from "lucide-react"
-import { fetchDashboardStats, fetchQuotations, fetchRecentOrders } from "@/lib/firebase-data"
+import { fetchDashboardStats, fetchRecentOrders } from "@/lib/firebase-data"
+import { SalesChart, RevenueTrendChart, OrderStatusChart } from "@/components/dashboard-charts"
+import { DashboardClient } from "./client"
 
 async function DashboardStats() {
+  console.log("DashboardStats component loading");
   const stats = await fetchDashboardStats()
+  console.log("Dashboard stats fetched", stats);
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -23,12 +27,12 @@ async function DashboardStats() {
       </Card>
       
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
           <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
           <ShoppingCart className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{stats.totalOrders}</div>
+          <div className="text-3xl font-bold">{stats.totalOrders}</div>
           <p className="text-xs text-muted-foreground">
             {stats.pendingOrders} pending, {stats.completedOrders} completed
           </p>
@@ -66,57 +70,10 @@ async function DashboardStats() {
   )
 }
 
-async function RecentQuotations() {
-  const quotations = await fetchQuotations()
-  const recentQuotations = quotations.slice(0, 5)
-
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Recent Quotations</CardTitle>
-        <CardDescription>
-          Latest quotation requests from customers.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          {recentQuotations.length > 0 ? (
-            recentQuotations.map((quotation) => (
-              <div key={quotation.id} className="flex items-center">
-                <div className="ml-4 space-y-1">
-                  <p className="text-sm font-medium leading-none">
-                    {quotation.fullName}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {quotation.company} - {quotation.email}
-                  </p>
-                </div>
-                <div className="ml-auto">
-                  <Badge 
-                    variant={
-                      quotation.status === 'completed' ? 'default' : 
-                      quotation.status === 'processed' ? 'secondary' : 
-                      'destructive'
-                    }
-                  >
-                    {quotation.status}
-                  </Badge>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="text-center py-4 text-muted-foreground">
-              No quotations found
-            </div>
-          )}
-        </div>
-      </CardContent>
-    </Card>
-  )
-}
-
 async function RecentOrders() {
+  console.log("RecentOrders component loading");
   const recentOrders = await fetchRecentOrders(5)
+  console.log("Orders fetched", recentOrders.length);
 
   return (
     <Card>
@@ -170,6 +127,8 @@ async function RecentOrders() {
 }
 
 export default function DashboardPage() {
+  console.log("DashboardPage component rendered");
+  
   return (
     <div className="space-y-6">
       <div>
@@ -180,7 +139,7 @@ export default function DashboardPage() {
       </div>
 
       <Suspense fallback={
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
           {[...Array(4)].map((_, i) => (
             <Card key={i}>
               <CardContent className="py-8">
@@ -193,6 +152,14 @@ export default function DashboardPage() {
         <DashboardStats />
       </Suspense>
 
+      {/* Charts Section */}
+      <div className="grid gap-4 md:grid-cols-3">
+        <SalesChart />
+        <RevenueTrendChart />
+        <OrderStatusChart />
+      </div>
+
+      {/* Recent Activity Section */}
       <div className="grid gap-4 md:grid-cols-2">
         <Suspense fallback={
           <Card>
@@ -211,7 +178,7 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
         }>
-          <RecentQuotations />
+          <DashboardClient />
         </Suspense>
       </div>
     </div>

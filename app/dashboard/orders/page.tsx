@@ -39,10 +39,6 @@ export default function OrdersPage() {
             Track and manage customer orders
           </p>
         </div>
-        <Button variant="outline">
-          <Download className="mr-2 h-4 w-4" />
-          Export Orders
-        </Button>
       </div>
 
       <Suspense fallback={

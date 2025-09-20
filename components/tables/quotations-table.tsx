@@ -1,21 +1,13 @@
 "use client"
 
+import { useState } from "react"
 import { ColumnDef } from "@tanstack/react-table"
 import { DataTable } from "@/components/data-table"
 import { Badge } from "@/components/ui/badge"
-
-export interface Quotation {
-  id: string;
-  budget: string;
-  company: string;
-  createdAt: Date;
-  email: string;
-  fullName: string;
-  message: string;
-  phone: string;
-  products: string;
-  status: 'pending' | 'processed' | 'completed';
-}
+import { Button } from "@/components/ui/button"
+import { Eye } from "lucide-react"
+import { Quotation } from "@/types/firebase"
+import { QuotationDetailModal } from "@/components/quotation-detail-modal"
 
 const columns: ColumnDef<Quotation>[] = [
   {
@@ -62,9 +54,9 @@ const columns: ColumnDef<Quotation>[] = [
       return (
         <Badge 
           variant={
-            status === 'completed' ? 'default' : 
-            status === 'processed' ? 'secondary' : 
-            'destructive'
+            status === 'approved' ? 'default' : 
+            status === 'rejected' ? 'destructive' : 
+            'secondary'
           }
         >
           {status}
@@ -87,5 +79,58 @@ interface QuotationsTableProps {
 }
 
 export function QuotationsTable({ data }: QuotationsTableProps) {
-  return <DataTable columns={columns} data={data} searchKey="fullName" />
+  const [selectedQuotation, setSelectedQuotation] = useState<Quotation | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [quotations, setQuotations] = useState<Quotation[]>(data)
+
+  const handleViewDetails = (quotation: Quotation) => {
+    setSelectedQuotation(quotation)
+    setIsModalOpen(true)
+  }
+
+  const handleStatusChange = (id: string, status: 'approved' | 'rejected') => {
+    // Update the local data to reflect the status change
+    setQuotations(prev => prev.map(quotation => 
+      quotation.id === id ? { ...quotation, status } : quotation
+    ))
+    
+    // Also update the selected quotation if it's the same one
+    if (selectedQuotation && selectedQuotation.id === id) {
+      setSelectedQuotation({ ...selectedQuotation, status })
+    }
+  }
+
+  // Add the action column to the columns array
+  const columnsWithActions: ColumnDef<Quotation>[] = [
+    ...columns,
+    {
+      id: "actions",
+      header: "Actions",
+      cell: ({ row }) => {
+        const quotation = row.original
+        return (
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={() => handleViewDetails(quotation)}
+          >
+            <Eye className="h-4 w-4 mr-1" />
+            View
+          </Button>
+        )
+      },
+    },
+  ]
+
+  return (
+    <>
+      <DataTable columns={columnsWithActions} data={quotations} searchKey="fullName" />
+      <QuotationDetailModal 
+        quotation={selectedQuotation}
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onStatusChange={handleStatusChange}
+      />
+    </>
+  )
 }
