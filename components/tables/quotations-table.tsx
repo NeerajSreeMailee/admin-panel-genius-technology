@@ -77,6 +77,7 @@ const columns: ColumnDef<Quotation>[] = [
 interface QuotationsTableProps {
   data: Quotation[]
 }
+export type { Quotation } from '@/types/firebase'
 
 export function QuotationsTable({ data }: QuotationsTableProps) {
   const [selectedQuotation, setSelectedQuotation] = useState<Quotation | null>(null)
