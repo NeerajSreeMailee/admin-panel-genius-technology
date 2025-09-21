@@ -25,10 +25,7 @@ const nextConfig: NextConfig = {
       transform: '@radix-ui/react-*/{{member}}',
       preventFullImport: true,
     },
-    'lucide-react': {
-      transform: 'lucide-react/dist/esm/icons/{{member}}',
-      skipDefaultConversion: true,
-    },
+    // Removed lucide-react transform as it's causing build issues
   },
 };
 
