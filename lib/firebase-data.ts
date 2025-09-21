@@ -8,17 +8,20 @@ export async function fetchProducts(): Promise<Product[]> {
     const productsRef = collection(db, 'mobile')
     const snapshot = await getDocs(productsRef)
 
-    return snapshot.docs.map(doc => ({
-      id: doc.id, // This is the title/product name
-      title: doc.id, // Document ID is the title
-      brand: doc.data().Brand || '',
-      category: doc.data().Category || '',
-      description: doc.data().description || '',
-      images: doc.data().images || [],
-      price: doc.data().price || 0,
-      type: doc.data().type || '',
-      available_quantity: doc.data().available_quantity || 0,
-    })).sort((a, b) => a.brand.localeCompare(b.brand)) // Sort by brand
+    return snapshot.docs.map(doc => {
+      const data = doc.data();
+      return ({
+        id: doc.id, // This is the title/product name
+        title: doc.id, // Document ID is the title
+        brand: data.Brand || '',
+        category: data.Category || '',
+        description: data.description || data.Description || '',
+        images: data.images || [],
+        price: data.price || 0,
+        type: data.type || '',
+        available_quantity: data.available_quantity || 0,
+      })
+    }).sort((a, b) => a.brand.localeCompare(b.brand)) // Sort by brand
   } catch (error) {
     console.error('Error fetching products:', error)
     return []
@@ -159,7 +162,7 @@ export async function addProduct(productData: Omit<Product, 'id'>) {
     await setDoc(productRef, {
       Brand: firebaseData.brand, // Note: Firebase uses 'Brand' with capital B
       Category: firebaseData.category, // Note: Firebase uses 'Category' with capital C
-      description: firebaseData.description,
+      description: firebaseData.description, // Note: Firebase uses 'description' with lowercase d
       images: firebaseData.images || [],
       price: firebaseData.price,
       type: firebaseData.type,
@@ -184,7 +187,7 @@ export async function updateProduct(productId: string, productData: Omit<Product
     await updateDoc(productRef, {
       Brand: firebaseData.brand, // Note: Firebase uses 'Brand' with capital B
       Category: firebaseData.category, // Note: Firebase uses 'Category' with capital C
-      description: firebaseData.description,
+      description: firebaseData.description, // Note: Firebase uses 'description' with lowercase d
       images: firebaseData.images || [],
       price: firebaseData.price,
       type: firebaseData.type,
